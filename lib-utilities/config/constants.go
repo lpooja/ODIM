@@ -109,12 +109,9 @@ var (
 	DefaultSkipListUnderOthers = []string{"Power", "Thermal", "SmartStorage"}
 	// DefaultCipherSuiteList - default cipher suite list
 	DefaultCipherSuiteList = []uint16{
-		tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
-		tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
 		tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
 		tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-		tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-		tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+		tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
 	}
 	// SupportedCipherSuitesList - list of cipher suites supported by GO
 	// TODO : list needs to be updated, everytime GO adds a new cipher suite
@@ -139,6 +136,7 @@ var (
 		"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256": tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
 		"TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384":   tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
 		"TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384": tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+		"TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305":  tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
 	}
 	// SupportedTLSVersions - list of TLS versions supported by GO
 	// TODO : list needs to be updated, everytime GO adds a new TLS version
