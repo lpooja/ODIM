@@ -47,17 +47,17 @@ type Manager struct {
 	Links                   *Links             `json:"Links,omitempty"`
 	Actions                 *Actions           `json:"Actions,omitempty"`
 	AutoDSTEnabled          bool               `json:"AutoDSTEnabled,omitempty"`
-	DateTime                string             `json:"DateTime,omitempty"`
+	DateTime                string             `json:"DateTime"`
 	LastResetTime           string             `json:"LastResetTime,omitempty"`
 	Manufacturer            string             `json:"Manufacturer,omitempty"`
-	Model                   string             `json:"Model,omitempty"`
+	Model                   string             `json:"Model"`
 	PartNumber              string             `json:"PartNumber,omitempty"`
-	PowerState              string             `json:"PowerState,omitempty"`
+	PowerState              string             `json:"PowerState"`
 	Redundancy              []dmtf.Redundancy  `json:"Redundancy,omitempty"`
 	RemoteAccountService    *dmtf.Link         `json:"RemoteAccountService,omitempty"`
 	RemoteRedfishServiceURI string             `json:"RemoteRedfishServiceUri,omitempty"`
 	SerialNumber            string             `json:"SerialNumber,omitempty"`
-	ServiceEntryPointUUID   string             `json:"ServiceEntryPointUUID,omitempty"`
+	ServiceEntryPointUUID   string             `json:"ServiceEntryPointUUID"`
 	TimeZoneName            string             `json:"TimeZoneName,omitempty"`
 	Measurements            []*dmtf.Link       `json:"Measurements,omitempty"`
 	Location                *dmtf.Link         `json:"Location,omitempty"`
@@ -65,6 +65,8 @@ type Manager struct {
 	RedundancyCount         int                `json:"Redundancy@odata.count,omitempty"`
 	SerialConsole           dmtf.SerialConsole `json:"SerialConsole,omitempty"`
 	SparePartNumber         string             `json:"SparePartNumber,omitempty"`
+	DateTimeLocalOffset     string             `json:"DateTimeLocalOffset"`
+	Health                  string             `json:"Health"`
 }
 
 // Status struct is to define the status of the manager
