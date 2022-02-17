@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -78,7 +79,6 @@ func (e *ExternalInterface) GetManagers(req *managersproto.ManagerRequest) respo
 		}
 		resp.Body = manager
 	} else {
-
 		requestData := strings.SplitN(req.ManagerID, ".", 2)
 		if len(requestData) <= 1 {
 			resp = e.getPluginManagerResoure(requestData[0], req.URL)
@@ -118,6 +118,14 @@ func (e *ExternalInterface) GetManagers(req *managersproto.ManagerRequest) respo
 		var managerType string
 		if val, ok := managerData["ManagerType"]; ok {
 			managerType = val.(string)
+		}
+		//adding default description
+		if _, ok := managerData["Description"]; !ok {
+			managerData["Description"] = "BMC Manager"
+		}
+		//adding PowerState
+		if _, ok := managerData["PowerState"]; !ok {
+			managerData["PowerState"] = "On"
 		}
 
 		if managerType != common.ManagerTypeService && managerType != "" {
@@ -186,8 +194,15 @@ func (e *ExternalInterface) getManagerDetails(id string) (mgrmodel.Manager, erro
 		UUID:            mgrData.UUID,
 		FirmwareVersion: mgrData.FirmwareVersion,
 		Status: &mgrmodel.Status{
-			State: mgrData.State,
+			State:  mgrData.State,
+			Health: mgrData.Health,
 		},
+		Description:         mgrData.Description,
+		LogServices:         mgrData.LogServices,
+		Model:               "ODIMRA" + " " + mgrData.FirmwareVersion,
+		DateTime:            time.Now().UTC().String(),
+		DateTimeLocalOffset: "+00:00",
+		PowerState:          "On",
 	}, nil
 }
 
@@ -199,14 +214,35 @@ func (e *ExternalInterface) getManagerDetails(id string) (mgrmodel.Manager, erro
 // status code, status message, headers and body and the second value is error.
 func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerRequest) response.RPC {
 	var resp response.RPC
+	var tableName string
+	var resource map[string]interface{}
 	requestData := strings.SplitN(req.ManagerID, ".", 2)
+
+	urlData := strings.Split(req.URL, "/")
 	if len(requestData) <= 1 {
-		resp = e.getPluginManagerResoure(requestData[0], req.URL)
+		resourceName := urlData[len(urlData)-1]
+
+		tableName = common.ManagersResource[resourceName]
+		data, err := e.DB.GetResource(tableName, req.URL)
+		if err != nil {
+			if req.ManagerID != config.Data.RootServiceUUID {
+				return e.getPluginManagerResoure(requestData[0], req.URL)
+			}
+			errorMessage := "unable to get odimra managers details: " + err.Error()
+			log.Error(errorMessage)
+			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
+		}
+
+		json.Unmarshal([]byte(data), &resource)
+		resp.Body = resource
+		resp.StatusCode = http.StatusOK
+		resp.StatusMessage = response.Success
+
 		return resp
+
 	}
 	uuid := requestData[0]
-	urlData := strings.Split(req.URL, "/")
-	var tableName string
+
 	if req.ResourceID == "" {
 		resourceName := urlData[len(urlData)-1]
 		tableName = common.ManagersResource[resourceName]
@@ -231,8 +267,8 @@ func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerReques
 		}
 	}
 
-	var resource map[string]interface{}
 	json.Unmarshal([]byte(data), &resource)
+
 	resp.Body = resource
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
@@ -343,8 +379,7 @@ func (e *ExternalInterface) getPluginManagerResoure(managerID, reqURI string) re
 	if jerr != nil {
 		errorMessage := "unable to unmarshal manager details: " + jerr.Error()
 		log.Error(errorMessage)
-		resp = common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage,
-			nil, nil)
+		resp = common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, nil, nil)
 		return resp
 	}
 	var pluginID = managerData["Name"].(string)
@@ -378,6 +413,7 @@ func (e *ExternalInterface) getPluginManagerResoure(managerID, reqURI string) re
 		}
 
 	}
+
 	req.OID = reqURI
 	var errorMessage = "unable to get the details " + reqURI + ": "
 	body, _, getResponse, err := mgrcommon.ContactPlugin(req, errorMessage)
@@ -394,6 +430,7 @@ func (e *ExternalInterface) getPluginManagerResoure(managerID, reqURI string) re
 			return resp
 		}
 	}
+
 	return fillResponse(body, managerData)
 
 }
@@ -411,6 +448,15 @@ func fillResponse(body []byte, managerData map[string]interface{}) response.RPC 
 		log.Error(err.Error())
 		return common.GeneralError(http.StatusInternalServerError, response.InternalError, err.Error(),
 			[]interface{}{}, nil)
+	}
+	if _, ok := respData["DateTime"]; !ok {
+		respData["DateTime"] = time.Now().UTC().String()
+	}
+	if _, ok := respData["DateTimeLocalOffset"]; !ok {
+		respData["DateTimeLocalOffset"] = "+00:00"
+	}
+	if _, ok := respData["SerialConsole"]; !ok {
+		respData["SerialConsole"] = dmtf.SerialConsole{}
 	}
 	respData["Links"] = managerData["Links"]
 	resp.Body = respData

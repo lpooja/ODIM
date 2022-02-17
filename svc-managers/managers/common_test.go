@@ -18,15 +18,18 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"testing"
+	"time"
+
+	dmtf "github.com/ODIM-Project/ODIM/lib-dmtf/model"
 	"github.com/ODIM-Project/ODIM/lib-utilities/common"
 	"github.com/ODIM-Project/ODIM/lib-utilities/config"
 	"github.com/ODIM-Project/ODIM/lib-utilities/errors"
 	"github.com/ODIM-Project/ODIM/lib-utilities/response"
 	"github.com/ODIM-Project/ODIM/svc-managers/mgrcommon"
 	"github.com/ODIM-Project/ODIM/svc-managers/mgrmodel"
-	"io/ioutil"
-	"net/http"
-	"testing"
 )
 
 func TestGetExternalInterface(t *testing.T) {
@@ -90,11 +93,17 @@ func mockGetManagerByURL(url string) (string, *errors.Error) {
 		managerData["Name"] = "noToken"
 	case "/redfish/v1/Managers/" + config.Data.RootServiceUUID:
 		managerData["ManagerType"] = "Service"
-		managerData["Status"] = `{"State":"Enabled"}}`
+		managerData["Status"] = `{"State":"Enabled","Health":"OK"}}`
 		managerData["Name"] = "odimra"
 		managerData["ManagerID"] = config.Data.RootServiceUUID
 		managerData["UUID"] = config.Data.RootServiceUUID
 		managerData["FirmwareVersion"] = "1.0"
+		managerData["Description"] = "odimra manager"
+		managerData["Model"] = "ODIMRA" + config.Data.FirmwareVersion
+		managerData["DateTime"] = time.Now().String()
+		managerData["DateTimeLocalOffset"] = "+00:00"
+		managerData["PowerState"] = "On"
+		managerData["LogServices"] = &dmtf.Link{Oid: "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices"}
 	}
 	data, _ := json.Marshal(managerData)
 	return string(data), nil
@@ -148,6 +157,14 @@ func mockGetResource(table, key string) (string, *errors.Error) {
 		return "", errors.PackError(errors.DBKeyNotFound, "not found")
 	} else if key == "/redfish/v1/Managers/uuid1.1/VirtualMedia/4" {
 		return "", errors.PackError(errors.DBKeyNotFound, "not found")
+	} else if key == "/redfish/v1/Managers/uuid1.1/Logservice" {
+		return "", errors.PackError(errors.DBKeyNotFound, "not found")
+	} else if key == "/redfish/v1/Managers/uuid" {
+		return "", errors.PackError(errors.DBKeyNotFound, "not found")
+	} else if key == "/redfish/v1/Managers/noPlugin/EthernetInterfaces" {
+		return "", errors.PackError(errors.DBKeyNotFound, "not found")
+	} else if key == "/redfish/v1/Managers/uuid/EthernetInterfaces" {
+		return "", errors.PackError(errors.DBKeyNotFound, "not found")
 	}
 	return "body", nil
 }
@@ -159,10 +176,13 @@ func mockGetDeviceInfo(req mgrcommon.ResourceInfoRequest) (string, error) {
 		return "", fmt.Errorf("error")
 	} else if req.URL == "/redfish/v1/Managers/uuid1.1/VirtualMedia/4" {
 		return "", fmt.Errorf("error")
+	} else if req.URL == "/redfish/v1/Managers/uuid1.1/Logservice" {
+		return "", fmt.Errorf("error")
 	}
 	manager := mgrmodel.Manager{
 		Status: &mgrmodel.Status{
-			State: "Enabled",
+			State:  "Enabled",
+			Health: "OK",
 		},
 	}
 	dataByte, err := json.Marshal(manager)
@@ -172,14 +192,16 @@ func mockGetDeviceInfo(req mgrcommon.ResourceInfoRequest) (string, error) {
 func mockDeviceRequest(req mgrcommon.ResourceInfoRequest) response.RPC {
 	var resp response.RPC
 	resp.Header = map[string]string{"Content-type": "application/json; charset=utf-8"}
-	if req.URL == "/redfish/v1/Managers/deviceAbsent.1" || req.URL == "/redfish/v1/Managers/uuid1.1/Virtual" {
+	if req.URL == "/redfish/v1/Managers/deviceAbsent.1" || req.URL == "/redfish/v1/Managers/uuid1.1/Virtual" || req.URL == "/redfish/v1/Managers/uuid.1/Logservice" {
+
 		resp.StatusCode = http.StatusNotFound
 		resp.StatusMessage = response.ResourceNotFound
 		return resp
 	}
 	manager := mgrmodel.Manager{
 		Status: &mgrmodel.Status{
-			State: "Enabled",
+			State:  "Enabled",
+			Health: "OK",
 		},
 	}
 	dataByte, err := json.Marshal(manager)
