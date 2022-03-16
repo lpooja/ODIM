@@ -124,20 +124,20 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	mgrmodel.GenericSave([]byte(dbdata), "LogServicesCollection", key)
 	
 	//adding Logervice Members
-	logEntrydata := model.LogServices{
+	logEntrydata := dmtf.LogServices{
 		Ocontext:    "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
-		Oid:         "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL",
+		Oid:         "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL",
 		Oetag:       "W570254F2",
 		Otype:       "#LogService.v1_3_0.LogService",
 		Description: "Logs view",
-		Entries: &model.Entries{
-			Oid:"/redfish/v1/Managers/" + managerUUID + "/LogServices/SL/Entries",
+		Entries: &dmtf.Entries{
+			Oid:"/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL/Entries",
 		},
 		ID:              "SL",
 		Name:            "Security Log",
 		OverWritePolicy: "WrapsWhenFull",
 	}
-	dbdata, err := json.Marshal(logEntrydata)
+	dbdata, err = json.Marshal(logEntrydata)
 	if err != nil {
 		return fmt.Errorf("unable to marshal manager data: %v", err)
 	}
@@ -145,13 +145,13 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	mgrmodel.GenericSave([]byte(dbdata), "LogServices", key)
 	
 	// adding empty logservice entry collection
-	entriesdata := model.Collection{
+	entriesdata := dmtf.Collection{
 		ODataContext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
-		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL/Entries",
+		ODataID:      "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL/Entries",
 		ODataEtag:    "W570254F2",
 		ODataType:    "#LogEntryCollection.LogEntryCollection",
 		Description:  "Security Logs view",
-		Members:      []*model.Link{},
+		Members:      []*dmtf.Link{},
 		MembersCount: 0,
 		Name:         "Security Logs",
 	}
@@ -159,7 +159,7 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	if err != nil {
 		return fmt.Errorf("unable to marshal manager data: %v", err)
 	}
-	key = "/redfish/v1/Managers/" + managerUUID + "/LogServices/SL/Entries"
+	key = "/redfish/v1/Managers/" + config.Data.RootServiceUUID  + "/LogServices/SL/Entries"
 		mgrmodel.GenericSave([]byte(dbentriesdata), "EntriesCollection", key)	
 	return nil
 }
