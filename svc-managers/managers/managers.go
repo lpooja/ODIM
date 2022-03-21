@@ -249,7 +249,6 @@ func (e *ExternalInterface) getManagerDetails(id string) (mgrmodel.Manager, erro
 		PowerState:          mgrData.PowerState,
 	}, nil
 }
-
 // GetManagersResource is used to fetch resource data. The function is supposed to be used as part of RPC
 // For getting system resource information,  parameters need to be passed GetSystemsRequest .
 // GetManagersResource holds the  Uuid,Url and Resourceid ,
@@ -257,16 +256,22 @@ func (e *ExternalInterface) getManagerDetails(id string) (mgrmodel.Manager, erro
 // There will be two return values for the fuction. One is the RPC response, which contains the
 // status code, status message, headers and body and the second value is error.
 func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerRequest) response.RPC {
+log.Info("********************************GetManagersResource")
 	var resp response.RPC
 	var tableName string
+	var resourceName string
 	var resource map[string]interface{}
 	requestData := strings.SplitN(req.ManagerID, ".", 2)
-
 	urlData := strings.Split(req.URL, "/")
 	if len(requestData) <= 1 {
-		resourceName := urlData[len(urlData)-1]
-
-		tableName = common.ManagersResource[resourceName]
+		if req.ResourceID == "" {
+			resourceName = urlData[len(urlData)-1]
+			tableName = common.ManagersResource[resourceName]
+		} else {
+			tableName = urlData[len(urlData)-2]
+		}
+		log.Info("resounrcename----",resourceName)
+		log.Info("tableName--------------------------",tableName)
 		data, err := e.DB.GetResource(tableName, req.URL)
 		if err != nil {
 			if req.ManagerID != config.Data.RootServiceUUID {
@@ -293,7 +298,6 @@ func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerReques
 	} else {
 		tableName = urlData[len(urlData)-2]
 	}
-
 	data, err := e.DB.GetResource(tableName, req.URL)
 	if err != nil {
 		if errors.DBKeyNotFound == err.ErrNo() {
@@ -319,6 +323,7 @@ func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerReques
 
 	return resp
 }
+
 
 // VirtualMediaActions is used to perform action on VirtualMedia. For insert and eject of virtual media this function is used
 func (e *ExternalInterface) VirtualMediaActions(req *managersproto.ManagerRequest) response.RPC {
@@ -474,7 +479,11 @@ func (e *ExternalInterface) getPluginManagerResoure(managerID, reqURI string) re
 			return resp
 		}
 	}
-
+	if _, ok := managerData["RemoteAccountService"]; !ok {
+		managerData["RemoteAccountService"] = map[string]string{
+			"@odata.id": "/redfish/v1/Managers/" + managerID + "/RemoteAccountService",
+		}
+	}
 	return fillResponse(body, managerData)
 
 }
@@ -501,6 +510,7 @@ func fillResponse(body []byte, managerData map[string]interface{}) response.RPC 
 		respData["SerialConsole"] = dmtf.SerialConsole{}
 	}
 	respData["Links"] = managerData["Links"]
+	respData["RemoteAccountService"]=managerData["RemoteAccountService"]
 	resp.Body = respData
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
@@ -541,6 +551,12 @@ func (e *ExternalInterface) GetRemoteAccountService(req *managersproto.ManagerRe
 	var resp response.RPC
 
 	requestData := strings.SplitN(req.ManagerID, ".", 2)
+	log.Info("requestData---",requestData)
+	if len(requestData) <= 1 {
+		resp = e.getPluginManagerResoure(requestData[0], req.URL)
+		log.Info("reposnse")
+		return resp
+	}else{
 	uuid := requestData[0]
 	uri := replaceBMCAccReq(req.URL, req.ManagerID)
 	data, err := e.getResourceInfoFromDevice(uri, uuid, requestData[1])
@@ -557,6 +573,7 @@ func (e *ExternalInterface) GetRemoteAccountService(req *managersproto.ManagerRe
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
 	return resp
+	}
 }
 
 func convertToRedfishModel(uri, data string) interface{} {

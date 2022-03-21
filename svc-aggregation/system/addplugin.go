@@ -17,6 +17,9 @@ package system
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
+
 	"github.com/ODIM-Project/ODIM/lib-dmtf/model"
 	"github.com/ODIM-Project/ODIM/lib-utilities/common"
 	"github.com/ODIM-Project/ODIM/lib-utilities/config"
@@ -26,8 +29,6 @@ import (
 	"github.com/ODIM-Project/ODIM/svc-aggregation/agmodel"
 	"github.com/ODIM-Project/ODIM/svc-aggregation/agresponse"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"strings"
 )
 
 func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, targetURI string, pluginContactRequest getResourceRequest, queueList []string, cmVariants connectionMethodVariants) (response.RPC, string, []byte) {
@@ -204,6 +205,66 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 
 		return common.GeneralError(http.StatusConflict, response.ResourceAlreadyExists, errMsg, []interface{}{"Plugin", "PluginID", plugin.ID}, taskInfo), "", nil
 	}
+	//adding empty RootAccountService Collection
+	accdata := model.AccountService{
+		ODataContext: "/redfish/v1/$metadata#AccountService.AccountService",
+		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService",
+		//ODataEtag:    "W570254F2",
+		ID:          "AccountService",
+		ODataType:   "#AccountService.v1_5_0.AccountService",
+		Description: "iLO User Accounts",
+		Name:        "Account Service",
+		Status:      model.Status{},
+		Accounts: model.Link{
+			Oid: "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService/Accounts",
+		},
+		Roles: model.Link{
+			Oid: "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService/Roles",
+		},
+		MinPasswordLength: 8,
+		LocalAccountAuth:  "Enabled",
+	}
+	accdbdata, err := json.Marshal(accdata)
+	if err != nil {
+		errMsg := "unable to marshal manager data: %v" + err.Error()
+		log.Error(errMsg)
+		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, taskInfo), "", nil
+
+	}
+	acckey := "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService"
+	accdbErr := agmodel.SavePluginManagerInfo([]byte(accdbdata), "ManagerAccountCollection", acckey)
+	if accdbErr != nil {
+		errMsg := accdbErr.Error()
+		log.Error(errMsg)
+
+		return common.GeneralError(http.StatusConflict, response.ResourceAlreadyExists, errMsg, []interface{}{"Plugin", "PluginID", plugin.ID}, taskInfo), "", nil
+	}
+	//adding Account collection t0 RemoteAccountService
+	accServicedata := model.Collection{
+		ODataContext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
+		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService/Accounts",
+		ODataEtag:    "W570254F2",
+		ODataType:    "#ManagerAccountCollection.ManagerAccountCollection",
+		Description:  "iLO User Accounts",
+		Members:      []*model.Link{},
+		MembersCount: 0,
+		Name:         "Accounts",
+	}
+	accServicedbdata, err := json.Marshal(accServicedata)
+	if err != nil {
+		errMsg := "unable to marshal manager data: %v" + err.Error()
+		log.Error(errMsg)
+		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, taskInfo), "", nil
+
+	}
+	accServicedkey := "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService/Accounts"
+	accServicedbErr := agmodel.SavePluginManagerInfo([]byte(accServicedbdata), "ManagerAccountCollection", accServicedkey)
+	if accServicedbErr != nil {
+		errMsg := accServicedbErr.Error()
+		log.Error(errMsg)
+
+		return common.GeneralError(http.StatusConflict, response.ResourceAlreadyExists, errMsg, []interface{}{"Plugin", "PluginID", plugin.ID}, taskInfo), "", nil
+	}
 	// saving all plugin manager data
 	var listMembers = make([]agresponse.ListMember, 0)
 	for oid, data := range managersData {
@@ -221,7 +282,7 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 
 	}
 	e.SubscribeToEMB(plugin.ID, queueList)
-
+	log.Info("1111111111111111111111111")
 	// store encrypted password
 	plugin.Password = ciphertext
 	plugin.ManagerUUID = managerUUID
@@ -239,7 +300,9 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 	for i := 0; i < len(listMembers); i++ {
 		managersList = append(managersList, listMembers[i].OdataID)
 	}
+	log.Info("22222222222222222222222222222")
 	e.PublishEvent(managersList, "ManagerCollection")
+	log.Info("3333333333333333333333333333")
 	resp.StatusCode = http.StatusCreated
 	log.Error("sucessfully added  plugin with the id ", cmVariants.PluginID)
 

@@ -226,11 +226,10 @@ func (e *ExternalInterface) deletePlugin(oid string) response.RPC {
 		}
 		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 	}
-
-	//deleting logservice empty collection
+//deleting logservice empty collection
 	if resource["LogService"] != nil {
 		lkey := oid + "/LogServices"
-		dberr = agmodel.DeleteManagersData(lkey, LogServiceCollection)
+		dberr = agmodel.DeleteManagersData(lkey, "LogServicesCollection")
 		if dberr != nil {
 			errMsg := derr.Error()
 			log.Error(errMsg)
@@ -239,6 +238,37 @@ func (e *ExternalInterface) deletePlugin(oid string) response.RPC {
 			}
 			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 		}
+		SLKey := oid + "/LogServices/SL"
+		dberr = agmodel.DeleteManagersData(SLKey, "LogServices")
+		if dberr != nil {
+			errMsg := derr.Error()
+			log.Error(errMsg)
+			if errors.DBKeyNotFound == derr.ErrNo() {
+				return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"LogServices", SLKey}, nil)
+			}
+			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
+		}
+		logEntriesKey := oid + "/LogServices/SL/Entries"
+		dberr = agmodel.DeleteManagersData(logEntriesKey, "EntriesCollection")
+		if dberr != nil {
+			errMsg := derr.Error()
+			log.Error(errMsg)
+			if errors.DBKeyNotFound == derr.ErrNo() {
+				return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"EntriesCollection", logEntriesKey}, nil)
+			}
+			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
+		}
+
+	}
+	accServiceKey := oid + "/RemoteAccountService"
+	dberr = agmodel.DeleteManagersData(accServiceKey, "ManagerAccountCollection")
+	if dberr != nil {
+		errMsg := derr.Error()
+		log.Error(errMsg)
+		if errors.DBKeyNotFound == derr.ErrNo() {
+			return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"ManagerAccountCollection", accServiceKey}, nil)
+		}
+		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 	}
 	// deleting the plugin if  zero devices are managed
 	dberr = agmodel.DeletePluginData(pluginID, PluginTable)
