@@ -304,7 +304,7 @@ func TestExternalInterface_DeleteAggregationSourceManager(t *testing.T) {
 		//ODataEtag:    "W570254F2",
 		"ODataType":    "#LogEntryCollection.LogEntryCollection",
 		"Description":  "Security Logs view",
-		"Members":      []*model.Link{},
+		"Members":     map[string]interface{}{},
 		"MembersCount": 0,
 		"Name":         "Security Logs",
 	})
