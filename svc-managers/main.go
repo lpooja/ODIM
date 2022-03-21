@@ -101,7 +101,7 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	}
 	managerInterface.AddManagertoDBInterface(mgr)
 
-	//adding Logervice Collection
+	//adding LogeSrvice Collection
 	data := dmtf.Collection{
 		ODataContext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
 		ODataID:      "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices",
@@ -123,7 +123,7 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	key := "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices"
 	mgrmodel.GenericSave([]byte(dbdata), "LogServicesCollection", key)
 
-	//adding Logervice Members
+	//adding LogService Members
 	logEntrydata := dmtf.LogServices{
 		Ocontext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
 		Oid:      "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL",
@@ -161,5 +161,6 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	}
 	key = "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL/Entries"
 	mgrmodel.GenericSave([]byte(dbentriesdata), "EntriesCollection", key)
+
 	return nil
 }
