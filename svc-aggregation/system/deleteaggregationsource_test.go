@@ -122,6 +122,33 @@ func mockLogServicesCollectionData(id string, data map[string]interface{}) error
 	}
 	return nil
 }
+
+func mockLogServicesSLData(id string, data map[string]interface{}) error {
+	reqData, _ := json.Marshal(data)
+
+	connPool, err := common.GetDBConnection(common.InMemory)
+	if err != nil {
+		return fmt.Errorf("error while trying to connecting to DB: %v", err.Error())
+	}
+
+	if err = connPool.Create("LogServices", id, string(reqData)); err != nil {
+		return fmt.Errorf("error while trying to create new %v resource: %v", "LogServices", err.Error())
+	}
+	return nil
+}
+func mockLogServicesEntriesData(id string, data map[string]interface{}) error {
+	reqData, _ := json.Marshal(data)
+
+	connPool, err := common.GetDBConnection(common.InMemory)
+	if err != nil {
+		return fmt.Errorf("error while trying to connecting to DB: %v", err.Error())
+	}
+
+	if err = connPool.Create("EntriesCollection", id, string(reqData)); err != nil {
+		return fmt.Errorf("error while trying to create new %v resource: %v", "EntriesCollection", err.Error())
+	}
+	return nil
+}
 func TestDeleteAggregationSourceWithRediscovery(t *testing.T) {
 	d := getMockExternalInterface()
 	type args struct {
@@ -248,7 +275,7 @@ func TestExternalInterface_DeleteAggregationSourceManager(t *testing.T) {
 			"@odata.id": "/redfish/v1/Managers/1234877451-1234/LogServices",
 		},
 	})
-	
+
 	mockLogServicesCollectionData("/redfish/v1/Managers/1234877451-1234/LogServices", map[string]interface{}{
 		"ODataContext": "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
 		"ODataID":      "/redfish/v1/Managers/1234877451-1234/LogServices",
@@ -258,6 +285,29 @@ func TestExternalInterface_DeleteAggregationSourceManager(t *testing.T) {
 		"Members":      map[string]interface{}{},
 		"MembersCount": 0,
 		"Name":         "Logs",
+	})
+	mockLogServicesSLData("/redfish/v1/Managers/1234877451-1234/LogServices/SL", map[string]interface{}{
+		"Ocontext": "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
+		"ODataID":  "/redfish/v1/Managers/1234877451-1234/LogServices/SL",
+		//Oetag:       "W570254F2",
+		"ODataType":   "#LogService.v1_3_0.LogService",
+		"Description": "Logs view",
+		"Entries": map[string]interface{}{
+			"@odata.id": "/redfish/v1/Managers/1234877451-1234/LogServices/SL/Entries",
+		},
+		"ID":              "SL",
+		"Name":            "Security Log",
+		"OverWritePolicy": "WrapsWhenFull",
+	})
+	mockLogServicesEntriesData("/redfish/v1/Managers/1234877451-1234/LogServices/SL/Entries", map[string]interface{}{
+		"ODataContext": "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
+		"ODataID":      "/redfish/v1/Managers/1234877451-1234/LogServices/SL/Entries",
+		//ODataEtag:    "W570254F2",
+		"ODataType":    "#LogEntryCollection.LogEntryCollection",
+		"Description":  "Security Logs view",
+		"Members":      []*model.Link{},
+		"MembersCount": 0,
+		"Name":         "Security Logs",
 	})
 
 	mockManagersData("/redfish/v1/Managers/1234877451-1235", map[string]interface{}{
