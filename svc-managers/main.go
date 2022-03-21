@@ -161,5 +161,6 @@ func addManagertoDB(managerInterface mgrcommon.DBInterface) error {
 	}
 	key = "/redfish/v1/Managers/" + config.Data.RootServiceUUID + "/LogServices/SL/Entries"
 	mgrmodel.GenericSave([]byte(dbentriesdata), "EntriesCollection", key)
+
 	return nil
 }

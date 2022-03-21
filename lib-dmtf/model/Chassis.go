@@ -93,7 +93,7 @@ type LogServices struct {
 	MaxNumberOfRecords  int         `json:"MaxNumberOfRecords,omitempty"`
 	OverWritePolicy     string      `json:"OverWritePolicy,omitempty"`
 	ServiceEnabled      bool        `json:"ServiceEnabled,omitempty"`
-	Status              Status      `json:"Status,omitempty"`
+	Status              *Status     `json:"Status,omitempty"`
 	AutoDSTEnabled      bool        `json:"AutoDSTEnabled,omitempty"`
 	Actions             *OemActions `json:"Actions,omitempty"`
 	Oem                 *Oem        `json:"Oem,omitempty"`
