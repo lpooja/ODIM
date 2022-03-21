@@ -265,7 +265,6 @@ func TestExternalInterface_DeleteAggregationSourceManager(t *testing.T) {
 	}
 
 	mockPluginData(t, "GRF_v1.0.0")
-	//mockPluginData(t, "ILO_v1.0.0")
 	mockPluginData(t, "NoStatusPlugin_v1.0.0")
 	mockDeviceData("24b243cf-f1e3-5318-92d9-2d6737d6b0b9", device1)
 	mockManagersData("/redfish/v1/Managers/1234877451-1234", map[string]interface{}{
