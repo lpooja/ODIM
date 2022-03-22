@@ -199,13 +199,14 @@ var ChassisResource = map[string]string{
 // so it will be usefull to store the resource data into the particular database table
 // and also it will be usefull to retrives the manager resource data
 var ManagersResource = map[string]string{
-	"NetworkProtocol":    "NetworkProtocol",
-	"EthernetInterfaces": "EthernetInterfacesCollection",
-	"HostInterfaces":     "HostInterfacesCollection",
-	"VirtualMedia":       "VirtualMediaCollection",
-	"LogServices":        "LogServicesCollection",
-	"SerialInterfaces":   "SerialInterfaceCollection",
-	"ManagerAccountCollection": "ManagerAccountCollection",
+	"NetworkProtocol":      "NetworkProtocol",
+	"EthernetInterfaces":   "EthernetInterfacesCollection",
+	"HostInterfaces":       "HostInterfacesCollection",
+	"VirtualMedia":         "VirtualMediaCollection",
+	"LogServices":          "LogServicesCollection",
+	"SerialInterfaces":     "SerialInterfaceCollection",
+	"RemoteAccountService": "ManagerAccountCollection",
+	"Accounts":             "ManagerAccountCollection",
 }
 
 // ResourceTypes specifies the map  of valid resource types that can be used for an event subscription

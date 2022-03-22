@@ -226,7 +226,7 @@ func (e *ExternalInterface) deletePlugin(oid string) response.RPC {
 		}
 		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 	}
-//deleting logservice empty collection
+	//deleting logservice empty collection
 	if resource["LogService"] != nil {
 		lkey := oid + "/LogServices"
 		dberr = agmodel.DeleteManagersData(lkey, "LogServicesCollection")

@@ -256,7 +256,6 @@ func (e *ExternalInterface) getManagerDetails(id string) (mgrmodel.Manager, erro
 // There will be two return values for the fuction. One is the RPC response, which contains the
 // status code, status message, headers and body and the second value is error.
 func (e *ExternalInterface) GetManagersResource(req *managersproto.ManagerRequest) response.RPC {
-log.Info("********************************GetManagersResource")
 	var resp response.RPC
 	var tableName string
 	var resourceName string
@@ -270,8 +269,6 @@ log.Info("********************************GetManagersResource")
 		} else {
 			tableName = urlData[len(urlData)-2]
 		}
-		log.Info("resounrcename----",resourceName)
-		log.Info("tableName--------------------------",tableName)
 		data, err := e.DB.GetResource(tableName, req.URL)
 		if err != nil {
 			if req.ManagerID != config.Data.RootServiceUUID {
@@ -281,17 +278,13 @@ log.Info("********************************GetManagersResource")
 			log.Error(errorMessage)
 			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
 		}
-
 		json.Unmarshal([]byte(data), &resource)
 		resp.Body = resource
 		resp.StatusCode = http.StatusOK
 		resp.StatusMessage = response.Success
-
 		return resp
-
 	}
 	uuid := requestData[0]
-
 	if req.ResourceID == "" {
 		resourceName := urlData[len(urlData)-1]
 		tableName = common.ManagersResource[resourceName]
@@ -314,13 +307,10 @@ log.Info("********************************GetManagersResource")
 			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
 		}
 	}
-
 	json.Unmarshal([]byte(data), &resource)
-
 	resp.Body = resource
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
-
 	return resp
 }
 
@@ -542,7 +532,6 @@ func (e *ExternalInterface) deviceCommunication(reqURL, uuid, systemID, httpMeth
 	}
 	return e.Device.DeviceRequest(deviceInfoRequest)
 }
-
 // GetRemoteAccountService is used to fetch resource data for BMC account service.
 // ManagerRequest holds the UUID, URL and ResourceId ,
 // There will be two return values for the function. One is the RPC response, which contains the
@@ -551,28 +540,48 @@ func (e *ExternalInterface) GetRemoteAccountService(req *managersproto.ManagerRe
 	var resp response.RPC
 
 	requestData := strings.SplitN(req.ManagerID, ".", 2)
-	log.Info("requestData---",requestData)
+	urlData := strings.Split(req.URL, "/")
 	if len(requestData) <= 1 {
-		resp = e.getPluginManagerResoure(requestData[0], req.URL)
-		log.Info("reposnse")
+		var tableName string
+		var resourceName string
+			var resource map[string]interface{}
+		if req.ResourceID == "" {
+			resourceName = urlData[len(urlData)-1]
+			tableName = common.ManagersResource[resourceName]
+		} else {
+			tableName = urlData[len(urlData)-2]
+		}
+		data, err := e.DB.GetResource(tableName, req.URL)
+		if err != nil {
+			if req.ManagerID != config.Data.RootServiceUUID {
+				return e.getPluginManagerResoure(requestData[0], req.URL)
+			}
+			errorMessage := "unable to get odimra managers details: " + err.Error()
+			log.Error(errorMessage)
+			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errorMessage, []interface{}{}, nil)
+		}
+		json.Unmarshal([]byte(data), &resource)
+		resp.Body = resource
+		resp.StatusCode = http.StatusOK
+		resp.StatusMessage = response.Success
 		return resp
-	}else{
-	uuid := requestData[0]
-	uri := replaceBMCAccReq(req.URL, req.ManagerID)
-	data, err := e.getResourceInfoFromDevice(uri, uuid, requestData[1])
-	if err != nil {
-		errorMessage := "unable to get resource details from device: " + err.Error()
-		log.Error(errorMessage)
-		errArgs := []interface{}{}
-		return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errorMessage, errArgs, nil)
-	}
-	// Replace response body to BMC manager
-	data = replaceBMCAccResp(data, req.ManagerID)
-	resource := convertToRedfishModel(req.URL, data)
-	resp.Body = resource
-	resp.StatusCode = http.StatusOK
-	resp.StatusMessage = response.Success
-	return resp
+	} else {
+		uuid := requestData[0]
+		uri := replaceBMCAccReq(req.URL, req.ManagerID)
+		data, err := e.getResourceInfoFromDevice(uri, uuid, requestData[1])
+		if err != nil {
+			errorMessage := "unable to get resource details from device: " + err.Error()
+			log.Error(errorMessage)
+			errArgs := []interface{}{}
+			return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errorMessage, errArgs, nil)
+		}
+		// Replace response body to BMC manager
+		data = replaceBMCAccResp(data, req.ManagerID)
+		resource := convertToRedfishModel(req.URL, data)
+		resp.Body = resource
+		resp.StatusCode = http.StatusOK
+		resp.StatusMessage = response.Success
+		return resp
 	}
 }
 

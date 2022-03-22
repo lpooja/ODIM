@@ -243,7 +243,7 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 	accServicedata := model.Collection{
 		ODataContext: "/redfish/v1/$metadata#LogServiceCollection.LogServiceCollection",
 		ODataID:      "/redfish/v1/Managers/" + managerUUID + "/RemoteAccountService/Accounts",
-		ODataEtag:    "W570254F2",
+		//ODataEtag:    "W570254F2",
 		ODataType:    "#ManagerAccountCollection.ManagerAccountCollection",
 		Description:  "iLO User Accounts",
 		Members:      []*model.Link{},
@@ -282,7 +282,6 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 
 	}
 	e.SubscribeToEMB(plugin.ID, queueList)
-	log.Info("1111111111111111111111111")
 	// store encrypted password
 	plugin.Password = ciphertext
 	plugin.ManagerUUID = managerUUID
@@ -300,9 +299,7 @@ func (e *ExternalInterface) addPluginData(req AddResourceRequest, taskID, target
 	for i := 0; i < len(listMembers); i++ {
 		managersList = append(managersList, listMembers[i].OdataID)
 	}
-	log.Info("22222222222222222222222222222")
 	e.PublishEvent(managersList, "ManagerCollection")
-	log.Info("3333333333333333333333333333")
 	resp.StatusCode = http.StatusCreated
 	log.Error("sucessfully added  plugin with the id ", cmVariants.PluginID)
 
