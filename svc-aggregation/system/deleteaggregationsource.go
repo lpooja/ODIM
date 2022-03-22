@@ -260,15 +260,17 @@ func (e *ExternalInterface) deletePlugin(oid string) response.RPC {
 		}
 
 	}
-	accServiceKey := oid + "/RemoteAccountService"
-	dberr = agmodel.DeleteManagersData(accServiceKey, "ManagerAccountCollection")
-	if dberr != nil {
-		errMsg := derr.Error()
-		log.Error(errMsg)
-		if errors.DBKeyNotFound == derr.ErrNo() {
-			return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"ManagerAccountCollection", accServiceKey}, nil)
+	if resource["RemoteAccountService"] != nil {
+		accServiceKey := oid + "/RemoteAccountService"
+		dberr = agmodel.DeleteManagersData(accServiceKey, "ManagerAccountCollection")
+		if dberr != nil {
+			errMsg := derr.Error()
+			log.Error(errMsg)
+			if errors.DBKeyNotFound == derr.ErrNo() {
+				return common.GeneralError(http.StatusNotFound, response.ResourceNotFound, errMsg, []interface{}{"ManagerAccountCollection", accServiceKey}, nil)
+			}
+			return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 		}
-		return common.GeneralError(http.StatusInternalServerError, response.InternalError, errMsg, nil, nil)
 	}
 	// deleting the plugin if  zero devices are managed
 	dberr = agmodel.DeletePluginData(pluginID, PluginTable)
