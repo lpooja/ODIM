@@ -169,8 +169,9 @@ func (e *ExternalInterface) CreateVolume(req *systemsproto.VolumeRequest) respon
 	if err != nil {
 		resp.StatusCode = getResponse.StatusCode
 		json.Unmarshal(body, &resp.Body)
-		return resp
+		return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, err.Error(), nil, nil)
 	}
+
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
 	err = json.Unmarshal(body, &resp.Body)
