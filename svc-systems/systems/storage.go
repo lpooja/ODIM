@@ -173,7 +173,7 @@ func (e *ExternalInterface) CreateVolume(req *systemsproto.VolumeRequest) respon
 		fmt.Println("body-----", string(body))
 		fmt.Println("err---", err.Error())
 		//	fmt.Println(" getResponse.MsgArgs", getResponse.MsgArgs)
-		return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, body, err.Error(), nil)
+		return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, string(body), []interface{}{err.Error()}, nil)
 
 		//	return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, err.Error(), nil, nil)
 	}
