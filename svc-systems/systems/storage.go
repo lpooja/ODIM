@@ -169,7 +169,7 @@ func (e *ExternalInterface) CreateVolume(req *systemsproto.VolumeRequest) respon
 	if err != nil {
 		resp.StatusCode = getResponse.StatusCode
 		json.Unmarshal(body, &resp.Body)
-		fmt.Println("getResponse---", string(getResponse))
+		fmt.Println("getResponse---", (getResponse))
 		fmt.Println("body-----", string(body))
 		fmt.Println("err---", err.Error())
 		//	fmt.Println(" getResponse.MsgArgs", getResponse.MsgArgs)
