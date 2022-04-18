@@ -187,9 +187,10 @@ func (e *ExternalInterface) validateProperties(request *smodel.Volume, systemID 
 	err := validate.Struct(request)
 	fmt.Println("err---", err)
 	if err != nil {
-		fmt.Println("[]interface{}{err.Field()}", []interface{}{err.Field()})
 
 		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println("[]interface{}{err.Field()}", []interface{}{err.Field()})
+
 			return http.StatusBadRequest, response.PropertyMissing, []interface{}{err.Field()}, fmt.Errorf(err.Field() + " field is missing")
 		}
 	}
