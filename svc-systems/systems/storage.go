@@ -185,7 +185,7 @@ func (e *ExternalInterface) validateProperties(request *smodel.Volume, systemID 
 	validate := validator.New()
 	// if any of the mandatory fields missing in the struct, then it will return an error
 	err := validate.Struct(request)
-	fmt.Println("err---", err, "err.Field()", []interface{err.Field()})
+	fmt.Println("err---", err, "err.Field()---", []interface{}{err.Field()})
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
 			return http.StatusBadRequest, response.PropertyMissing, []interface{}{err.Field()}, fmt.Errorf(err.Field() + " field is missing")
