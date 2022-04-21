@@ -165,19 +165,26 @@ func (e *ExternalInterface) CreateVolume(req *systemsproto.VolumeRequest) respon
 	contactRequest.DeviceInfo = target
 	contactRequest.OID = fmt.Sprintf("/ODIM/v1/Systems/%s/Storage/%s/Volumes", requestData[1], req.StorageInstance)
 
+	// body, _, getResponse, err := scommon.ContactPlugin(contactRequest, "error while creating a volume: ")
+	// if err != nil {
+	// 	resp.StatusCode = getResponse.StatusCode
+	// 	json.Unmarshal(body, &resp.Body)
+	// 	fmt.Println("getResponse---", (getResponse))
+	// 	fmt.Println("body-----", string(body))
+	// 	fmt.Println("err---", err.Error())
+	// 	//	fmt.Println(" getResponse.MsgArgs", getResponse.MsgArgs)
+	// 	return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, string(body), []interface{}{err.Error()}, nil)
+
+	// 	//	return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, err.Error(), nil, nil)
+	// }
+
 	body, _, getResponse, err := scommon.ContactPlugin(contactRequest, "error while creating a volume: ")
 	if err != nil {
 		resp.StatusCode = getResponse.StatusCode
 		json.Unmarshal(body, &resp.Body)
-		fmt.Println("getResponse---", (getResponse))
 		fmt.Println("body-----", string(body))
-		fmt.Println("err---", err.Error())
-		//	fmt.Println(" getResponse.MsgArgs", getResponse.MsgArgs)
-		return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, string(body), []interface{}{err.Error()}, nil)
-
-		//	return common.GeneralError(getResponse.StatusCode, getResponse.StatusMessage, err.Error(), nil, nil)
+		return resp
 	}
-
 	resp.StatusCode = http.StatusOK
 	resp.StatusMessage = response.Success
 	err = json.Unmarshal(body, &resp.Body)
