@@ -115,7 +115,7 @@ func MockContactClient(url, method, token string, odataID string, body interface
 			Body: ioutil.NopCloser(bytes.NewBufferString(body)),
 		}
 		return r, nil
-	} else if url == "https://localhost:4321/ODIM/v1/Sessions" || url == "https://10.10.1.6:4321/ODIM/v1/Sessions" {
+	} else if url == "https://localhost:4321/ODIM/v1/Sessions" || url == "https1://:4321/ODIM/v1/Sessions" {
 		body := `{"MessageId": "` + response.Success + `"}`
 
 		r := &http.Response{
@@ -263,7 +263,7 @@ func MockGetPluginData(pluginID string) (*evmodel.Plugin, *errors.Error) {
 		}
 	case "CFM":
 		plugin = &evmodel.Plugin{
-			IP:                "10.10.1.6",
+			IP:                "odim.com",
 			Port:              "4321",
 			Password:          password,
 			Username:          "admin",
@@ -427,7 +427,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{},
 				ResourceTypes:        []string{},
 				OriginResources:      []string{"/redfish/v1/Fabrics/123456"},
-				Hosts:                []string{"10.10.1.6"},
+				Hosts:                []string{"odim.com"},
 				SubordinateResources: true,
 			},
 		}
@@ -505,10 +505,10 @@ func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, err
 			EventHostIP:     "10.10.1.3",
 			OriginResources: []string{"/redfish/v1/Systems/11081de0-4859-984c-c35a-6c50732d72da.1"},
 		}
-	} else if strings.Contains(hostIP, "10.10.1.6") {
+	} else if strings.Contains(hostIP, "odim.com") {
 		deviceSub = &evmodel.DeviceSubscription{
 			Location:        "/ODIM/v1/Subscriptions/12345",
-			EventHostIP:     "10.10.1.6",
+			EventHostIP:     "odim.com",
 			OriginResources: []string{"/redfish/v1/Fabrics/123456"},
 		}
 	} else if strings.Contains(hostIP, "10.10.1.5") {
