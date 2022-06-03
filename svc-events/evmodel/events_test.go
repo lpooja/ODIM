@@ -435,7 +435,7 @@ func TestSaveDeviceSubscription(t *testing.T) {
 
 	var devSubscription = DeviceSubscription{
 		EventHostIP:     "10.10.0.1",
-		Location:        "https://10.10.10.23/redfish/v1/EventService/Subscriptions/123",
+		Location:        "https://localhost/redfish/v1/EventService/Subscriptions/123",
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
 	}
 	if cerr := SaveDeviceSubscription(devSubscription); cerr != nil {
@@ -454,7 +454,7 @@ func TestSaveDeviceSubscription_existing_subscription(t *testing.T) {
 
 	var devSubscription = DeviceSubscription{
 		EventHostIP:     "10.10.0.1",
-		Location:        "https://10.10.10.23/redfish/v1/EventService/Subscriptions/123",
+		Location:        "https://localhost/redfish/v1/EventService/Subscriptions/123",
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
 	}
 	if cerr := SaveDeviceSubscription(devSubscription); cerr != nil {
@@ -477,7 +477,7 @@ func TestGetDeviceSubscriptions(t *testing.T) {
 
 	var devSubscription = DeviceSubscription{
 		EventHostIP:     "10.10.0.1",
-		Location:        "https://10.10.10.23/redfish/v1/EventService/Subscriptions/123",
+		Location:        "https://localhost/redfish/v1/EventService/Subscriptions/123",
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
 	}
 	if cerr := SaveDeviceSubscription(devSubscription); cerr != nil {
@@ -489,7 +489,7 @@ func TestGetDeviceSubscriptions(t *testing.T) {
 		t.Errorf("Error while getting device suscription: %v\n", err.Error())
 	}
 	assert.Equal(t, devSubscription.EventHostIP, devSub.EventHostIP, "event host ip should be 10.10.0.1")
-	assert.Equal(t, devSubscription.Location, devSub.Location, "Location should be https://10.10.10.23/redfish/v1/EventService/Subscriptions/123")
+	assert.Equal(t, devSubscription.Location, devSub.Location, "Location should be https://localhost/redfish/v1/EventService/Subscriptions/123")
 
 	if !reflect.DeepEqual(devSubscription.OriginResources, devSub.OriginResources) {
 		t.Errorf("Origin Resource are not same")
@@ -507,7 +507,7 @@ func TestDeleteDeviceSubscription(t *testing.T) {
 
 	var devSubscription = DeviceSubscription{
 		EventHostIP:     "10.10.0.1",
-		Location:        "https://10.10.10.23/redfish/v1/EventService/Subscriptions/123",
+		Location:        "https://localhost/redfish/v1/EventService/Subscriptions/123",
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
 	}
 	if cerr := SaveDeviceSubscription(devSubscription); cerr != nil {
@@ -530,14 +530,14 @@ func TestUpdateDeviceSubscriptionLocation(t *testing.T) {
 
 	var devSubscription = DeviceSubscription{
 		EventHostIP:     "10.10.0.1",
-		Location:        "https://10.10.10.23/redfish/v1/EventService/Subscriptions/123",
+		Location:        "https://localhost/redfish/v1/EventService/Subscriptions/123",
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
 	}
 	if cerr := SaveDeviceSubscription(devSubscription); cerr != nil {
 		t.Errorf("Error while saving device suscription: %v\n", cerr.Error())
 	}
 
-	devSubscription.Location = "https://10.10.10.23/redfish/v1/EventService/Subscriptions/12345"
+	devSubscription.Location = "https://localhost/redfish/v1/EventService/Subscriptions/12345"
 	if err := UpdateDeviceSubscriptionLocation(devSubscription); err != nil {
 		t.Errorf("Error while updating device suscription: %v\n", err.Error())
 	}
@@ -547,7 +547,7 @@ func TestUpdateDeviceSubscriptionLocation(t *testing.T) {
 		t.Errorf("Error while getting device suscription: %v\n", err.Error())
 	}
 	assert.Equal(t, devSubscription.EventHostIP, devSub.EventHostIP, "event host ip should be 10.10.0.1")
-	assert.Equal(t, devSubscription.Location, devSub.Location, "Location should be https://10.10.10.23/redfish/v1/EventService/Subscriptions/123")
+	assert.Equal(t, devSubscription.Location, devSub.Location, "Location should be https://localhost/redfish/v1/EventService/Subscriptions/123")
 
 	if !reflect.DeepEqual(devSubscription.OriginResources, devSub.OriginResources) {
 		t.Errorf("Origin Resource are not same")
@@ -565,7 +565,7 @@ func TestSaveEventSubscription(t *testing.T) {
 	}()
 	sub := Subscription{
 		SubscriptionID:  "1",
-		Destination:     "https://10.10.10.23:8080/destination",
+		Destination:     "https://localhost:8080/destination",
 		Name:            "Event Subscription",
 		EventTypes:      []string{"Alert", "StatusChange"},
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
@@ -585,7 +585,7 @@ func TestSaveEventSubscription_existingData(t *testing.T) {
 	}()
 	sub := Subscription{
 		SubscriptionID:  "123456",
-		Destination:     "https://10.10.10.23:8080/destination",
+		Destination:     "https://localhost:8080/destination",
 		Name:            "Event Subscription",
 		EventTypes:      []string{"Alert", "StatusChange"},
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
@@ -609,7 +609,7 @@ func TestGetEvtSubscriptions(t *testing.T) {
 
 	sub := Subscription{
 		SubscriptionID:  "1",
-		Destination:     "https://10.10.10.23:8080/destination",
+		Destination:     "https://localhost:8080/destination",
 		Name:            "Event Subscription",
 		EventTypes:      []string{"Alert", "StatusChange"},
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
@@ -623,9 +623,9 @@ func TestGetEvtSubscriptions(t *testing.T) {
 		t.Errorf("Error while getting event subscriptions: %v\n", err.Error())
 	}
 	assert.Equal(t, sub.SubscriptionID, evtSub[0].SubscriptionID, "SubscriptionID should be 1")
-	assert.Equal(t, sub.Destination, evtSub[0].Destination, "Destination should be https://10.10.10.23:8080/destination")
+	assert.Equal(t, sub.Destination, evtSub[0].Destination, "Destination should be https://localhost:8080/destination")
 	assert.Equal(t, sub.Name, evtSub[0].Name, "Name should be Event Subscription")
-	assert.Equal(t, sub.Destination, evtSub[0].Destination, "Destination should be https://10.10.10.23:8080/destination")
+	assert.Equal(t, sub.Destination, evtSub[0].Destination, "Destination should be https://localhost:8080/destination")
 	if !reflect.DeepEqual(sub.EventTypes, evtSub[0].EventTypes) {
 		t.Errorf("Event Types are not same")
 	}
@@ -645,7 +645,7 @@ func TestDeleteEvtSubscription(t *testing.T) {
 
 	sub := Subscription{
 		SubscriptionID:  "112345",
-		Destination:     "https://10.10.10.23:8080/destination",
+		Destination:     "https://localhost:8080/destination",
 		Name:            "Event Subscription",
 		EventTypes:      []string{"Alert", "StatusChange"},
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
@@ -672,7 +672,7 @@ func TestUpdateEvtSubscription(t *testing.T) {
 
 	sub := Subscription{
 		SubscriptionID:  "112345",
-		Destination:     "https://10.10.10.23:8080/destination",
+		Destination:     "https://localhost:8080/destination",
 		Name:            "Event Subscription",
 		EventTypes:      []string{"Alert", "StatusChange"},
 		OriginResources: []string{"/redfish/v1/Systems/uuid.1"},
@@ -681,7 +681,7 @@ func TestUpdateEvtSubscription(t *testing.T) {
 		t.Errorf("Error while making save event subscriptions: %v\n", cerr.Error())
 	}
 
-	sub.Destination = "https://10.10.10.23:8080/destination1"
+	sub.Destination = "https://localhost:8080/destination1"
 	if err := UpdateEventSubscription(sub); err != nil {
 		t.Errorf("Error while updating event subscriptions: %v\n", err.Error())
 	}
@@ -690,7 +690,7 @@ func TestUpdateEvtSubscription(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error while getting event subscriptions: %v\n", err.Error())
 	}
-	assert.Equal(t, "https://10.10.10.23:8080/destination1", evtSub[0].Destination, "Destination should be https://10.10.10.23:8080/destination1")
+	assert.Equal(t, "https://localhost:8080/destination1", evtSub[0].Destination, "Destination should be https://localhost:8080/destination1")
 
 }
 func TestSaveUndeliveredEvents(t *testing.T) {
