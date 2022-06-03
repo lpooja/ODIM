@@ -146,7 +146,7 @@ func MockContactClient(url, method, token string, odataID string, body interface
 			Body:       ioutil.NopCloser(bytes.NewBufferString(body)),
 		}
 		return response, nil
-	} else if url == "https://odim.com:4321/ODIM/v1/Subscriptions" {
+	} else if url == "https://localhost:4321/ODIM/v1/Subscriptions" {
 		body := `{"MessageId": "` + response.Success + `"}`
 		response := &http.Response{
 			StatusCode: http.StatusCreated,
@@ -157,7 +157,7 @@ func MockContactClient(url, method, token string, odataID string, body interface
 		}
 		response.Header.Set("location", "/ODIM/v1/Subscriptions/12345")
 		return response, nil
-	} else if url == "https://odim.com:4321/ODIM/v1/Subscriptions/12345" {
+	} else if url == "https://localhost:4321/ODIM/v1/Subscriptions/12345" {
 		body := `{"MessageId": "` + response.Success + `"}`
 		response := &http.Response{
 			StatusCode: http.StatusOK,
