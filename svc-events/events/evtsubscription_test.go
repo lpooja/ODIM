@@ -347,7 +347,7 @@ func TestFabricEventSubscription(t *testing.T) {
 	sessionUserName := "admin"
 	SubscriptionReq := map[string]interface{}{
 		"Name":                 "EventSubscription",
-		"Destination":          "https://localhost:8070/Destination1",
+		"Destination":          "https://odim.com:8070/Destination1",
 		"EventTypes":           []string{"Alert"},
 		"Protocol":             "Redfish",
 		"Context":              "Event Subscription",
