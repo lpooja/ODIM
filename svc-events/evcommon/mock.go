@@ -369,9 +369,9 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 			{
 				UserName:             "admin",
 				SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d7",
-				Destination:          "https://10.10.10.15:9090/events",
+				Destination:          "https://localhost:9090/events",
 				Name:                 "Subscription",
-				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
+				Location:             "https://localhost/EventService/Subscriptions/1",
 				Context:              "context",
 				EventTypes:           []string{"Alert", "ResourceAdded"},
 				MessageIds:           []string{"IndicatorChanged"},
