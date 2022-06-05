@@ -458,6 +458,6 @@ func TestCheckCollectionSubscription(t *testing.T) {
 	protocol := "Redfish"
 	p.checkCollectionSubscription(originResources, protocol)
 	devSub, _ := p.GetDeviceSubscriptions("*" + originResources)
-	assert.Equal(t, "https://100.100.100.100/ODIM/v1/Subscriptions/1", devSub.Location, "Location should be https://100.100.100.100/ODIM/v1/Subscriptions/12")
-	assert.Equal(t, "100.100.100.100", devSub.EventHostIP, "EventHostIP should be 100.100.100.100")
+	assert.Equal(t, "https://odim.local.com/ODIM/v1/Subscriptions/1", devSub.Location, "Location should be https://odim.local.com/ODIM/v1/Subscriptions/12")
+	assert.Equal(t, "odim.local.com", devSub.EventHostIP, "EventHostIP should be odim.local.com")
 }
