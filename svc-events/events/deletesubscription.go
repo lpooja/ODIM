@@ -67,6 +67,8 @@ func (e *ExternalInterfaces) DeleteEventSubscriptions(req *eventsproto.EventRequ
 	}
 	searchKey := evcommon.GetSearchKey(deviceIPAddress, evmodel.SubscriptionIndex)
 	log.Info("Getting event subscription details of device: ", deviceIPAddress)
+	log.Info("searchKey: ", searchKey)
+
 	subscriptionDetails, err := e.GetEvtSubscriptions(searchKey)
 	if err != nil && !strings.Contains(err.Error(), "No data found for the key") {
 		log.Error("error while getting event subscription details : " + err.Error())
