@@ -302,7 +302,7 @@ func MockGetSingleSystem(id string) (string, error) {
 	switch id {
 	case "6d4a0a66-7efa-578e-83cf-44dc68d2874e":
 		systemData = SavedSystems{
-			ManagerAddress: "100.100.100.100",
+			ManagerAddress: "odim.100.com",
 			Password:       []byte("Password"),
 			UserName:       "admin",
 			DeviceUUID:     "6d4a0a66-7efa-578e-83cf-44dc68d2874e",
