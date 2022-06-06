@@ -415,7 +415,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubordinateResources: false,
 			},
 		}
-	case "71de0110-c35a-4859-984c-072d6c5a32d9", "/redfish/v1/Fabrics/123456":
+	case "71de0110-c35a-4859-984c-072d6c5a32d9", "/redfish/v1/Fabrics/123456", "[^0-9]localhost[^0-9]":
 		subarr = []evmodel.Subscription{
 			{
 				SubscriptionID:       "71de0110-c35a-4859-984c-072d6c5a32d9",
