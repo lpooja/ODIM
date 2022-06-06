@@ -411,7 +411,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{},
 				ResourceTypes:        []string{},
 				OriginResources:      []string{"/redfish/v1/Systems/11081de0-4859-984c-c35a-6c50732d72da.1"},
-				Hosts:                []string{"10.10.1.3"},
+				Hosts:                []string{"odim.3.com"},
 				SubordinateResources: false,
 			},
 		}
