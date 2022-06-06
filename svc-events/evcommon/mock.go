@@ -213,7 +213,7 @@ func MockGetTarget(uuid string) (*evmodel.Target, error) {
 		}
 	case "110813e0-4859-984c-984c-d72da32d72da":
 		target = &evmodel.Target{
-			ManagerAddress: "odim.local.com",
+			ManagerAddress: "10.10.1.5",
 			Password:       encryptedData,
 			UserName:       "admin",
 			DeviceUUID:     "110813e0-4859-984c-984c-d72da32d72da",
@@ -263,7 +263,7 @@ func MockGetPluginData(pluginID string) (*evmodel.Plugin, *errors.Error) {
 		}
 	case "CFM":
 		plugin = &evmodel.Plugin{
-			IP:                "odim.com",
+			IP:                "10.10.1.6",
 			Port:              "4321",
 			Password:          password,
 			Username:          "admin",
@@ -273,7 +273,7 @@ func MockGetPluginData(pluginID string) (*evmodel.Plugin, *errors.Error) {
 		}
 	case "CFMPlugin":
 		plugin = &evmodel.Plugin{
-			IP:                "localhost",
+			IP:                "10.10.10.23",
 			Port:              "4321",
 			Password:          password,
 			Username:          "admin",
