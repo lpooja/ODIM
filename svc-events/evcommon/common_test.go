@@ -171,7 +171,7 @@ func startTestServer() *httptest.Server {
 	}
 
 	respBody := make(map[string]string)
-	respBody["odim.100.com"] = "/redfish/v1/EventService/Subscriptions/2"
+	respBody["100.100.100.100"] = "/redfish/v1/EventService/Subscriptions/2"
 	body, _ := json.Marshal(respBody)
 	pluginStatusRespBody := common.StatusResponse{
 		Status: &common.PluginResponseStatus{
