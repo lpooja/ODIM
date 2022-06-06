@@ -427,7 +427,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{},
 				ResourceTypes:        []string{},
 				OriginResources:      []string{"/redfish/v1/Fabrics/123456"},
-				Hosts:                []string{"localhost"},
+				Hosts:                []string{"localhost:123456"},
 				SubordinateResources: true,
 			},
 		}
