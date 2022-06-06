@@ -115,7 +115,7 @@ func MockContactClient(url, method, token string, odataID string, body interface
 			Body: ioutil.NopCloser(bytes.NewBufferString(body)),
 		}
 		return r, nil
-	} else if url == "https://10.10.10.23:4321/ODIM/v1/Sessions" || url == "https://localhost:4321/ODIM/v1/Sessions" {
+	} else if url == "https://10.10.10.23:4321/ODIM/v1/Sessions" || url == "https://192.0.2.0:4321/ODIM/v1/Sessions" {
 		body := `{"MessageId": "` + response.Success + `"}`
 
 		r := &http.Response{
