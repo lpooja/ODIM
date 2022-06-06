@@ -205,7 +205,7 @@ func MockGetTarget(uuid string) (*evmodel.Target, error) {
 		}
 	case "d72dade0-c35a-984c-4859-1108132d72da":
 		target = &evmodel.Target{
-			ManagerAddress: "10.10.1.4",
+			ManagerAddress: "odim.test1.com",
 			Password:       encryptedData,
 			UserName:       "admin",
 			DeviceUUID:     "d72dade0-c35a-984c-4859-1108132d72da",
