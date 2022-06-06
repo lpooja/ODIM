@@ -213,7 +213,7 @@ func MockGetTarget(uuid string) (*evmodel.Target, error) {
 		}
 	case "110813e0-4859-984c-984c-d72da32d72da":
 		target = &evmodel.Target{
-			ManagerAddress: "localhost",
+			ManagerAddress: "odim.domain.com",
 			Password:       encryptedData,
 			UserName:       "admin",
 			DeviceUUID:     "110813e0-4859-984c-984c-d72da32d72da",
@@ -310,7 +310,7 @@ func MockGetSingleSystem(id string) (string, error) {
 		}
 	case "11081de0-4859-984c-c35a-6c50732d72da":
 		systemData = SavedSystems{
-			ManagerAddress: "localhost",
+			ManagerAddress: "odim.3.com",
 			Password:       []byte("Password"),
 			UserName:       "admin",
 			DeviceUUID:     "11081de0-4859-984c-c35a-6c50732d72da",
