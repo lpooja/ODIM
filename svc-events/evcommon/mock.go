@@ -472,7 +472,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 			{
 				UserName:             "admin",
 				SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d8",
-				Destination:          "https://10.10.10.9:9090/events",
+				Destination:          "https://odim.t.com:9090/events",
 				Name:                 "Subscription",
 				Location:             "https://odim.2.com/EventService/Subscriptions/1",
 				Context:              "context",
@@ -525,7 +525,7 @@ func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, err
 		}
 	} else if strings.Contains(hostIP, "odim.t.com") {
 		deviceSub = &evmodel.DeviceSubscription{
-			Location:        "https://10.10.10.9/EventService/Subscriptions/1",
+			Location:        "https://odim.t.com/EventService/Subscriptions/1",
 			EventHostIP:     "odim.t.com",
 			OriginResources: []string{"/redfish/v1/Systems/11081de0-4859-984c-c35a-6c50732d72ea.1"},
 		}
