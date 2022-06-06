@@ -301,7 +301,7 @@ func TestCallPluginStartUp(t *testing.T) {
 	defer ts.Close()
 	servers := []SavedSystems{
 		SavedSystems{
-			ManagerAddress: "odim.100.com",
+			ManagerAddress: "100.100.100.100",
 			Password:       []byte("password"),
 			UserName:       "admin",
 			DeviceUUID:     "6d4a0a66-7efa-578e-83cf-44dc68d2874e",
@@ -391,7 +391,7 @@ func TestGetPluginStatusandStartUP(t *testing.T) {
 		PreferredAuthType: "BasicAuth",
 		PluginType:        "RF-GENERIC",
 	})
-	searchKey := GetSearchKey("odim.100.com", evmodel.DeviceSubscriptionIndex)
+	searchKey := GetSearchKey("100.100.100.100", evmodel.DeviceSubscriptionIndex)
 	deviceSubscription, err := st.GetDeviceSubscriptions(searchKey)
 	if err != nil {
 		t.Fatalf("error: %v", err)
