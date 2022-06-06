@@ -95,7 +95,7 @@ func TestPublishEventsWithEmptyOriginOfCondition(t *testing.T) {
 	}
 
 	var event common.Events
-	event.IP = "odim.local.com"
+	event.IP = "100.100.100.100"
 	msg, err := json.Marshal(message)
 	if err != nil {
 		t.Errorf("expected err is nil but got : %v", err)
