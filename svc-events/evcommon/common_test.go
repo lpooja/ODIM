@@ -171,7 +171,7 @@ func startTestServer() *httptest.Server {
 	}
 
 	respBody := make(map[string]string)
-	respBody["100.100.100.100"] = "/redfish/v1/EventService/Subscriptions/2"
+	respBody["odim.100.com"] = "/redfish/v1/EventService/Subscriptions/2"
 	body, _ := json.Marshal(respBody)
 	pluginStatusRespBody := common.StatusResponse{
 		Status: &common.PluginResponseStatus{
@@ -391,7 +391,7 @@ func TestGetPluginStatusandStartUP(t *testing.T) {
 		PreferredAuthType: "BasicAuth",
 		PluginType:        "RF-GENERIC",
 	})
-	searchKey := GetSearchKey("100.100.100.100", evmodel.DeviceSubscriptionIndex)
+	searchKey := GetSearchKey("odim.100.com", evmodel.DeviceSubscriptionIndex)
 	deviceSubscription, err := st.GetDeviceSubscriptions(searchKey)
 	if err != nil {
 		t.Fatalf("error: %v", err)
