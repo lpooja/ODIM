@@ -51,7 +51,7 @@ func TestPublishEventsToDestiantion(t *testing.T) {
 		},
 	}
 
-	ip := []string{"odim.local.com", "odim.local.com", "10.10.1.3", "10.10.1.3"}
+	ip := []string{"100.100.100.100", "100.100.100.100", "10.10.1.3", "10.10.1.3"}
 	pc := getMockMethods()
 	for i, v := range messages {
 		var event common.Events
