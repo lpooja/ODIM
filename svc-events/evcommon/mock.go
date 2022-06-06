@@ -132,7 +132,7 @@ func MockContactClient(url, method, token string, odataID string, body interface
 			StatusCode: http.StatusUnauthorized,
 			Body:       ioutil.NopCloser(bytes.NewBufferString(body)),
 		}, nil
-	} else if url == "https://10.10.1.5:1234/ODIM/v1/Subscriptions/123" {
+	} else if url == "https://odim.domain.com:1234/ODIM/v1/Subscriptions/123" {
 		body := `{"MessageId": "` + response.Success + `"}`
 		response := &http.Response{
 			StatusCode: http.StatusOK,
@@ -443,7 +443,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{},
 				ResourceTypes:        []string{},
 				OriginResources:      []string{"/redfish/v1/Fabrics/123"},
-				Hosts:                []string{"10.10.1.5"},
+				Hosts:                []string{"odim.domain.com"},
 				SubordinateResources: true,
 			},
 		}
