@@ -189,7 +189,7 @@ func MockGetTarget(uuid string) (*evmodel.Target, error) {
 	switch uuid {
 	case "6d4a0a66-7efa-578e-83cf-44dc68d2874e":
 		target = &evmodel.Target{
-			ManagerAddress: "100.100.100.100",
+			ManagerAddress: "odim.100.com",
 			Password:       encryptedData,
 			UserName:       "admin",
 			DeviceUUID:     "6d4a0a66-7efa-578e-83cf-44dc68d2874e",
@@ -480,7 +480,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{"IndicatorChanged"},
 				ResourceTypes:        []string{"ComputerSystem"},
 				OriginResources:      []string{"/redfish/v1/Systems/6d4a0a66-7efa-578e-83cf-44dc68d2874e.1"},
-				Hosts:                []string{"odim.100.com"},
+				Hosts:                []string{"100.100.100.100"},
 				SubordinateResources: true,
 			},
 		}
