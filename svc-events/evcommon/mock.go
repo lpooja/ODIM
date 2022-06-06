@@ -403,7 +403,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 			{
 				UserName:             "admin",
 				SubscriptionID:       "71de0110-c35a-4859-984c-072d6c5a32d8",
-				Destination:          "https://10.10.10.16:9090/events",
+				Destination:          "https://localhost:9090/events",
 				Name:                 "Subscription",
 				Location:             "https://10.10.10.3/EventService/Subscriptions/1",
 				Context:              "context",
@@ -419,7 +419,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 		subarr = []evmodel.Subscription{
 			{
 				SubscriptionID:       "71de0110-c35a-4859-984c-072d6c5a32d9",
-				Destination:          "https://10.10.10.16:9090/events",
+				Destination:          "https://localhost:9090/events",
 				Name:                 "Subscription",
 				Location:             "/ODIM/v1/Subscriptions/12345",
 				Context:              "context",
@@ -435,7 +435,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 		subarr = []evmodel.Subscription{
 			{
 				SubscriptionID:       "5a321010-c35a-4859-984c-072d6c",
-				Destination:          "https://10.10.10.16:9090/events",
+				Destination:          "https://localhost:9090/events",
 				Name:                 "Subscription",
 				Location:             "/ODIM/v1/Subscriptions/123",
 				Context:              "context",
