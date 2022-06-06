@@ -364,7 +364,7 @@ func MockGetFabricData(fabricID string) (evmodel.Fabric, error) {
 func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 	var subarr []evmodel.Subscription
 	switch searchKey {
-	case "81de0110-c35a-4859-984c-072d6c5a32d7", "/redfish/v1/Systems/6d4a0a66-7efa-578e-83cf-44dc68d2874e.1", "[^0-9]100.100.100[^0-9]":
+	case "81de0110-c35a-4859-984c-072d6c5a32d7", "/redfish/v1/Systems/6d4a0a66-7efa-578e-83cf-44dc68d2874e.1", "[^0-9]100.100.100.100[^0-9]":
 		subarr = []evmodel.Subscription{
 			{
 				UserName:             "admin",
@@ -493,10 +493,10 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 // MockGetDeviceSubscriptions is for mocking up of get device subscription
 func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, error) {
 	var deviceSub *evmodel.DeviceSubscription
-	if strings.Contains(hostIP, "odim.100.com") || hostIP == "*" {
+	if strings.Contains(hostIP, "100.100.100.100") || hostIP == "*" {
 		deviceSub = &evmodel.DeviceSubscription{
 			Location:        "https://odim.2.com/EventService/Subscriptions/1",
-			EventHostIP:     "odim.100.com",
+			EventHostIP:     "100.100.100.100",
 			OriginResources: []string{"/redfish/v1/Systems/6d4a0a66-7efa-578e-83cf-44dc68d2874e.1"},
 		}
 	} else if strings.Contains(hostIP, "10.10.1.3") {
