@@ -415,7 +415,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubordinateResources: false,
 			},
 		}
-	case "71de0110-c35a-4859-984c-072d6c5a32d9", "/redfish/v1/Fabrics/123456", "[^0-9]localhost[^0-9]":
+	case "71de0110-c35a-4859-984c-072d6c5a32d9", "/redfish/v1/Fabrics/123456", "[^0-9]localhost:1234[^0-9]":
 		subarr = []evmodel.Subscription{
 			{
 				SubscriptionID:       "71de0110-c35a-4859-984c-072d6c5a32d9",
@@ -427,7 +427,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				MessageIds:           []string{},
 				ResourceTypes:        []string{},
 				OriginResources:      []string{"/redfish/v1/Fabrics/123456"},
-				Hosts:                []string{"localhost"},
+				Hosts:                []string{"localhost:1234"},
 				SubordinateResources: true,
 			},
 		}
@@ -463,7 +463,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 					"/redfish/v1/Fabrics",
 					"/redfish/v1/Managers",
 					"/redfish/v1/TaskService/Tasks"},
-				Hosts:                []string{"localhost"},
+				Hosts:                []string{"localhost:1234"},
 				SubordinateResources: true,
 			},
 		}
@@ -508,7 +508,7 @@ func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, err
 	} else if strings.Contains(hostIP, "localhost") {
 		deviceSub = &evmodel.DeviceSubscription{
 			Location:        "/ODIM/v1/Subscriptions/12345",
-			EventHostIP:     "localhost",
+			EventHostIP:     "localhost:1234",
 			OriginResources: []string{"/redfish/v1/Fabrics/123456"},
 		}
 	} else if strings.Contains(hostIP, "10.10.1.5") {
