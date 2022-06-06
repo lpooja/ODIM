@@ -263,7 +263,7 @@ func MockGetPluginData(pluginID string) (*evmodel.Plugin, *errors.Error) {
 		}
 	case "CFM":
 		plugin = &evmodel.Plugin{
-			IP:                "10.10.1.6",
+			IP:                "odim.cfm.com",
 			Port:              "4321",
 			Password:          password,
 			Username:          "admin",
