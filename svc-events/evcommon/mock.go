@@ -369,7 +369,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 			{
 				UserName:             "admin",
 				SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d7",
-				Destination:          "https://odim.tt.com:9090/events",
+				Destination:          "https://10.10.10.15:9090/events",
 				Name:                 "Subscription",
 				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
 				Context:              "context",
@@ -381,12 +381,12 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubordinateResources: true,
 			},
 		}
-	case "11081de0-4859-984c-c35a-6c50732d72da", "/redfish/v1/Systems", "https://odim.tt.com:9090/events", "*":
+	case "11081de0-4859-984c-c35a-6c50732d72da", "/redfish/v1/Systems", "https://10.10.10.15:9090/events", "*":
 		subarr = []evmodel.Subscription{
 			{
 				UserName:             "admin",
 				SubscriptionID:       "11081de0-4859-984c-c35a-6c50732d72da",
-				Destination:          "https://odim.tt.com:9090/events",
+				Destination:          "https://10.10.10.15:9090/events",
 				Name:                 "Subscription",
 				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
 				Context:              "context",
