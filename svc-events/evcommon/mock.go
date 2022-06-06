@@ -213,7 +213,7 @@ func MockGetTarget(uuid string) (*evmodel.Target, error) {
 		}
 	case "110813e0-4859-984c-984c-d72da32d72da":
 		target = &evmodel.Target{
-			ManagerAddress: "10.10.1.5",
+			ManagerAddress: "localhost",
 			Password:       encryptedData,
 			UserName:       "admin",
 			DeviceUUID:     "110813e0-4859-984c-984c-d72da32d72da",
