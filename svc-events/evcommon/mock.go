@@ -371,7 +371,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d7",
 				Destination:          "https://odim.tt.com:9090/events",
 				Name:                 "Subscription",
-				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
+				Location:             "https://odim.2.com/EventService/Subscriptions/1",
 				Context:              "context",
 				EventTypes:           []string{"Alert", "ResourceAdded"},
 				MessageIds:           []string{"IndicatorChanged"},
@@ -388,7 +388,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubscriptionID:       "11081de0-4859-984c-c35a-6c50732d72da",
 				Destination:          "https://odim.tt.com:9090/events",
 				Name:                 "Subscription",
-				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
+				Location:             "https://odim.2.com/EventService/Subscriptions/1",
 				Context:              "context",
 				EventTypes:           []string{"Alert", "StatusChange"},
 				MessageIds:           []string{"IndicatorChanged", "StateChanged"},
@@ -474,7 +474,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 				SubscriptionID:       "81de0110-c35a-4859-984c-072d6c5a32d8",
 				Destination:          "https://10.10.10.9:9090/events",
 				Name:                 "Subscription",
-				Location:             "https://10.10.10.2/EventService/Subscriptions/1",
+				Location:             "https://odim.2.com/EventService/Subscriptions/1",
 				Context:              "context",
 				EventTypes:           []string{"Alert"},
 				MessageIds:           []string{"IndicatorChanged"},
@@ -495,7 +495,7 @@ func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, err
 	var deviceSub *evmodel.DeviceSubscription
 	if strings.Contains(hostIP, "100.100.100.100") || hostIP == "*" {
 		deviceSub = &evmodel.DeviceSubscription{
-			Location:        "https://10.10.10.2/EventService/Subscriptions/1",
+			Location:        "https://odim.2.com/EventService/Subscriptions/1",
 			EventHostIP:     "100.100.100.100",
 			OriginResources: []string{"/redfish/v1/Systems/6d4a0a66-7efa-578e-83cf-44dc68d2874e.1"},
 		}
