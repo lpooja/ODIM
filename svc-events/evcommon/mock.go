@@ -493,7 +493,7 @@ func MockGetEvtSubscriptions(searchKey string) ([]evmodel.Subscription, error) {
 // MockGetDeviceSubscriptions is for mocking up of get device subscription
 func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, error) {
 	var deviceSub *evmodel.DeviceSubscription
-	if strings.Contains(hostIP, "odim.100.com") || hostIP == "*" {
+	if strings.Contains(hostIP, "100.100.100.100") || hostIP == "*" {
 		deviceSub = &evmodel.DeviceSubscription{
 			Location:        "https://odim.2.com/EventService/Subscriptions/1",
 			EventHostIP:     "100.100.100.100",
