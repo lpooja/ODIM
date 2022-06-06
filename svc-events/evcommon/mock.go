@@ -516,7 +516,7 @@ func MockGetDeviceSubscriptions(hostIP string) (*evmodel.DeviceSubscription, err
 	} else if strings.Contains(hostIP, domain_ip) {
 		deviceSub = &evmodel.DeviceSubscription{
 			Location:        "/ODIM/v1/Subscriptions/123",
-			EventHostIP:     domain_ip",
+			EventHostIP:     domain_ip,
 			OriginResources: []string{"/redfish/v1/Fabrics/123"},
 		}
 	} else if strings.Contains(hostIP, "localhost") {
