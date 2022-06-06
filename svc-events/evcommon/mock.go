@@ -318,7 +318,7 @@ func MockGetSingleSystem(id string) (string, error) {
 		}
 	case "d72dade0-c35a-984c-4859-1108132d72da":
 		systemData = SavedSystems{
-			ManagerAddress: "10.10.1.4",
+			ManagerAddress: "odim.system.com",
 			Password:       []byte("Password"),
 			UserName:       "admin",
 			DeviceUUID:     "d72dade0-c35a-984c-4859-1108132d72da",
