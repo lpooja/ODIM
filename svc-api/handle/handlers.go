@@ -1199,7 +1199,13 @@ func LicenseMethodNotAllowed(ctx iris.Context) {
 	fillMethodNotAllowedErrorResponse(ctx)
 	return
 }
-
+// MethodNotAllowed holds builds reponse for the unallowed http operation
+func MethodNotAllowed(ctx iris.Context) {
+	defer ctx.Next()
+	ctx.ResponseWriter().Header().Set("Allow", "GET")
+	fillMethodNotAllowedErrorResponse(ctx)
+	return
+}
 // ManagersMethodNotAllowed holds builds reponse for the unallowed http operation on Managers URLs and returns 405 error.
 func ManagersMethodNotAllowed(ctx iris.Context) {
 	defer ctx.Next()
